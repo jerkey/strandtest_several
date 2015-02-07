@@ -61,7 +61,7 @@ int volts = 25;
 
 // fourteen LEDs arranged as two bars of 7.
 // give this function a color, and two numbers from 0 to 7 (how many to light up)
-void colorBars(Adafruit_NeoPixel strip, uint32_t color, uint8_t first, uint8_t second) {
+void colorBars(Adafruit_NeoPixel &strip, uint32_t color, uint8_t first, uint8_t second) {
   for(uint16_t i=0; i<7; i++) if (i < first) { // if the pixel should be "lit up"
     strip.setPixelColor(i, color); // light up the pixel with "color"
   } else {
