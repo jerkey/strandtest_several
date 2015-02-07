@@ -28,6 +28,8 @@ void setup() {
   strip5.begin();
   strip5.show(); // Initialize all pixels to 'off'
   secondColor = strip1.Color(150, 150, 150); // color for all second strips
+  Serial.begin(57600);
+  Serial.println("hello strandtest_several");
 }
 
 #define VOLTCOEFF 13.179  // larger number interprets as lower voltage
@@ -36,18 +38,25 @@ void setup() {
 
 void loop() {
   // Some example procedures showing how to display to the pixels:
-  float voltage = analogRead(A0) / VOLTCOEFF;
-  int volts = (int)(voltage / 25);
-  int amps = (int)((analogRead(A1) - AMPOFFSET) / AMPCOEFF);
+//  float voltage = analogRead(A0) / VOLTCOEFF;
+//  int volts = (int)(voltage / 25);
+//  int amps = (int)((analogRead(A1) - AMPOFFSET) / AMPCOEFF);
+int amps = 25;
+int volts = 25;
   colorBars(strip1,strip1.Color(255, 105, 0), amps, volts); // Orange
-  amps = (int)((analogRead(A2) - AMPOFFSET) / AMPCOEFF);
+  Serial.print("did orange ");
+//  amps = (int)((analogRead(A2) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip2,strip2.Color(255, 255, 0), amps, volts); // Yellow
-  amps = (int)((analogRead(A3) - AMPOFFSET) / AMPCOEFF);
+  Serial.print("did yellow ");
+//  amps = (int)((analogRead(A3) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip3,strip3.Color(0, 255, 0), amps, volts); // Green
-  amps = (int)((analogRead(A4) - AMPOFFSET) / AMPCOEFF);
+  Serial.print("did green ");
+//  amps = (int)((analogRead(A4) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip4,strip4.Color(0, 0, 255), amps, volts); // Blue
-  amps = (int)((analogRead(A5) - AMPOFFSET) / AMPCOEFF);
+  Serial.print("did blue ");
+//  amps = (int)((analogRead(A5) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip5,strip5.Color(80, 0, 80), amps, volts); // Violet
+  Serial.println("did violet");
 }
 
 // fourteen LEDs arranged as two bars of 7.
