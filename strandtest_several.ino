@@ -30,6 +30,7 @@ void setup() {
   secondColor = strip1.Color(150, 150, 150); // color for all second strips
   Serial.begin(57600);
   Serial.println("hello strandtest_several");
+  Serial.println("booted up, analogReadAll.ino printing A1 A2 A3 A4 A5");
 }
 
 #define VOLTCOEFF 13.179  // larger number interprets as lower voltage
@@ -44,19 +45,24 @@ void loop() {
 int amps = 25;
 int volts = 25;
   colorBars(strip1,strip1.Color(255, 105, 0), amps, volts); // Orange
-  Serial.print("did orange ");
 //  amps = (int)((analogRead(A2) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip2,strip2.Color(255, 255, 0), amps, volts); // Yellow
-  Serial.print("did yellow ");
 //  amps = (int)((analogRead(A3) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip3,strip3.Color(0, 255, 0), amps, volts); // Green
-  Serial.print("did green ");
 //  amps = (int)((analogRead(A4) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip4,strip4.Color(0, 0, 255), amps, volts); // Blue
-  Serial.print("did blue ");
 //  amps = (int)((analogRead(A5) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip5,strip5.Color(80, 0, 80), amps, volts); // Violet
-  Serial.println("did violet");
+  Serial.print(analogRead(A1));
+  Serial.print("  ");
+  Serial.print(analogRead(A2));
+  Serial.print("  ");
+  Serial.print(analogRead(A3));
+  Serial.print("  ");
+  Serial.print(analogRead(A4));
+  Serial.print("  ");
+  Serial.print(analogRead(A5));
+  Serial.println();
 }
 
 // fourteen LEDs arranged as two bars of 7.
