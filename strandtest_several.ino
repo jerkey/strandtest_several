@@ -9,17 +9,18 @@
 //   NEO_GRB     Pixels are wired for GRB bitstream
 //   NEO_KHZ400  400 KHz bitstream (e.g. FLORA pixels)
 //   NEO_KHZ800  800 KHz bitstream (e.g. High Density LED strip)
-Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(14, 3, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(14, 4, NEO_GRB + NEO_KHZ800);
+int numLeds = 65;
+Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(numLeds, 4, NEO_GRB + NEO_KHZ800);
+/*Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(14, 4, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(14, 5, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(14, 6, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(14, 7, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(14, 7, NEO_GRB + NEO_KHZ800);*/
 uint32_t secondColor; // the color used for the second 7 lights
 
 void setup() {
   strip1.begin();
   strip1.show(); // Initialize all pixels to 'off'
-  strip2.begin();
+/*  strip2.begin();
   strip2.show(); // Initialize all pixels to 'off'
   strip3.begin();
   strip3.show(); // Initialize all pixels to 'off'
@@ -27,24 +28,30 @@ void setup() {
   strip4.show(); // Initialize all pixels to 'off'
   strip5.begin();
   strip5.show(); // Initialize all pixels to 'off'
-  secondColor = strip1.Color(150, 150, 150); // color for all second strips
+  secondColor = strip1.Color(150, 150, 150); // color for all second strips*/
   Serial.begin(57600);
-  Serial.println("hello strandtest_several");
-  Serial.println("booted up, analogReadAll.ino printing A1 A2 A3 A4 A5");
+  Serial.println("hello strandtest_several branch:hvpcd");
+  Serial.println("booted up, analogReadAll.ino printing A0 A1");
 }
 
-#define VOLTCOEFF 13.179  // larger number interprets as lower voltage
-#define AMPCOEFF 8.0682 // 583 - 512 = 71; 71 / 8.8 amps = 8.0682
-#define AMPOFFSET 512.0 // when current sensor is at 0 amps this is the ADC value
+#define VOLTCOEFF 500.0 / 120.0  // 500 at 120vac
+#define VOLTOFFSET 0.0 // when voltage is 0 this is the ADC value
+#define AMPCOEFF 30 // 34 at 0.1A
+#define AMPOFFSET 31.0 // when current is 0 amps this is the ADC value
+#define OVERSAMPLING 50 // how many times to average analogReads
 
 void loop() {
   // Some example procedures showing how to display to the pixels:
 //  float voltage = analogRead(A0) / VOLTCOEFF;
 //  int volts = (int)(voltage / 25);
 //  int amps = (int)((analogRead(A1) - AMPOFFSET) / AMPCOEFF);
-int amps = 25;
-int volts = 25;
-  colorBars(strip1,strip1.Color(255, 105, 0), amps, volts); // Orange
+int ampsADC, voltsADC;
+float volts, amps;
+  for (int i = 0; i < numLeds; i++) {
+    strip1.setPixelColor(i,strip1.Color(i,0,70-i));
+  }
+  strip1.show();
+/*  colorBars(strip1,strip1.Color(255, 105, 0), amps, volts); // Orange
 //  amps = (int)((analogRead(A2) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip2,strip2.Color(255, 255, 0), amps, volts); // Yellow
 //  amps = (int)((analogRead(A3) - AMPOFFSET) / AMPCOEFF);
@@ -52,17 +59,27 @@ int volts = 25;
 //  amps = (int)((analogRead(A4) - AMPOFFSET) / AMPCOEFF);
   colorBars(strip4,strip4.Color(0, 0, 255), amps, volts); // Blue
 //  amps = (int)((analogRead(A5) - AMPOFFSET) / AMPCOEFF);
-  colorBars(strip5,strip5.Color(80, 0, 80), amps, volts); // Violet
-  Serial.print(analogRead(A1));
-  Serial.print("  ");
-  Serial.print(analogRead(A2));
-  Serial.print("  ");
-  Serial.print(analogRead(A3));
-  Serial.print("  ");
-  Serial.print(analogRead(A4));
-  Serial.print("  ");
-  Serial.print(analogRead(A5));
-  Serial.println();
+  colorBars(strip5,strip5.Color(80, 0, 80), amps, volts); // Violet*/
+  voltsADC = averageRead(A0);
+  volts = (voltsADC - VOLTOFFSET) / VOLTCOEFF;
+  ampsADC = averageRead(A1);
+  amps = (ampsADC - AMPOFFSET) / AMPCOEFF;
+  Serial.print(volts,1);
+  Serial.print("V (");
+  Serial.print(voltsADC);
+  Serial.print(")  ");
+  Serial.print(amps,1);
+  Serial.print("A (");
+  Serial.print(ampsADC);
+  Serial.println(")  ");
+}
+
+int averageRead(byte pin) {
+  int adder = 0;
+  for (int i = 0; i < OVERSAMPLING; i++) {
+    adder += analogRead(pin);
+  }
+  return (adder/OVERSAMPLING);
 }
 
 // fourteen LEDs arranged as two bars of 7.
