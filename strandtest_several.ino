@@ -9,9 +9,9 @@
 //   NEO_GRB     Pixels are wired for GRB bitstream
 //   NEO_KHZ400  400 KHz bitstream (e.g. FLORA pixels)
 //   NEO_KHZ800  800 KHz bitstream (e.g. High Density LED strip)
-Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(14, 3, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(14, 4, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(14, 5, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(14, 12, NEO_GRB + NEO_KHZ800,50);
+Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(14, 13, NEO_GRB + NEO_KHZ800,4);
+Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(14, 4, NEO_GRB + NEO_KHZ800,6);
 Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(14, 6, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(14, 7, NEO_GRB + NEO_KHZ800);
 uint32_t secondColor; // the color used for the second 7 lights
@@ -44,15 +44,15 @@ void loop() {
 //  int amps = (int)((analogRead(A1) - AMPOFFSET) / AMPCOEFF);
 int amps = 25;
 int volts = 25;
-  colorBars(strip1,strip1.Color(255, 105, 0), amps, volts); // Orange
+  colorBars(strip1,strip1.Color(millis()%256, 105, 0), amps, volts); // Orange
 //  amps = (int)((analogRead(A2) - AMPOFFSET) / AMPCOEFF);
-  colorBars(strip2,strip2.Color(255, 255, 0), amps, volts); // Yellow
+  colorBars(strip2,strip2.Color(millis()%256, 255, 0), amps, volts); // Yellow
 //  amps = (int)((analogRead(A3) - AMPOFFSET) / AMPCOEFF);
-  colorBars(strip3,strip3.Color(0, 255, 0), amps, volts); // Green
+  colorBars(strip3,strip3.Color(0, millis()%256, 0), amps, volts); // Green
 //  amps = (int)((analogRead(A4) - AMPOFFSET) / AMPCOEFF);
-  colorBars(strip4,strip4.Color(0, 0, 255), amps, volts); // Blue
+  colorBars(strip4,strip4.Color(0, 0, millis()%256), amps, volts); // Blue
 //  amps = (int)((analogRead(A5) - AMPOFFSET) / AMPCOEFF);
-  colorBars(strip5,strip5.Color(80, 0, 80), amps, volts); // Violet
+  colorBars(strip5,strip5.Color(millis()%256, 0, 80), amps, volts); // Violet
   Serial.print(analogRead(A1));
   Serial.print("  ");
   Serial.print(analogRead(A2));
